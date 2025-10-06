@@ -1,22 +1,7 @@
-import React, { useState } from 'react';
-import '@styles/home/CheckAtivities.scss';
 import CheckOutlined from '@ant-design/icons/lib/icons/CheckOutlined';
-import { LoadingOutlined } from '@ant-design/icons';
+import '@styles/home/CheckAtivities.scss';
 import { Spin } from 'antd';
-
-const Spinner = () => (
-  <svg className="animate-spin h-6 w-6 text-[#1E3A8A] mx-auto" fill="none" viewBox="0 0 24 24">
-    <circle
-      className="opacity-25"
-      cx="12"
-      cy="12"
-      r="10"
-      stroke="currentColor"
-      strokeWidth="4"
-    ></circle>
-    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-  </svg>
-);
+import React, { useState } from 'react';
 
 const CheckActivites = () => {
   const [studentId, setStudentId] = useState('');
