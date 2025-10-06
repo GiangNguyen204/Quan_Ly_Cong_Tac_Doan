@@ -61,7 +61,6 @@ const HeaderClient = () => {
         }}
       >
         <div className="flex items-center justify-between gap-2 sm:gap-3">
-          {/* Logo Section */}
           <div
             className="flex items-center flex-shrink-0"
             style={{ marginRight: 'clamp(0.25rem, 1vw, 0.75rem)' }}
@@ -73,7 +72,6 @@ const HeaderClient = () => {
               <LogoSwitcher />
             </div>
           </div>
-          {/* Title Section - Responsive */}
           <div className="min-w-0 flex-1 overflow-hidden">
             <Title
               level={3}
@@ -110,9 +108,7 @@ const HeaderClient = () => {
               </span>
             </div>
           </div>
-          {/* User Section */}
           <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-            {/* User info - Hidden on small screens */}
             <button
               className="bg-gradient-to-r from-blue-900 to-blue-700 text-white font-bold rounded-md hover:from-blue-800 hover:to-blue-600 transition-all duration-300 shadow-sm hover:shadow-md transform hover:scale-105 whitespace-nowrap"
               style={{
@@ -120,13 +116,15 @@ const HeaderClient = () => {
                 letterSpacing: '0.1px',
                 padding: 'clamp(0.3rem, 1.2vw, 0.5rem) clamp(0.4rem, 2vw, 0.8rem)',
               }}
+              onClick={() => {
+                window.location.href = '/auth/login';
+              }}
             >
               Đăng nhập
             </button>
           </div>
         </div>
       </div>
-      {/* Navigation Bar */}
       <nav
         className="w-full overflow-x-auto scrollbar-hide"
         style={{

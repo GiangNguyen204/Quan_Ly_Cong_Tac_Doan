@@ -12,10 +12,10 @@ const Footer = () => {
             'Manrope, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
         }}
       >
-        <div className="w-full text-right text-lg leading-relaxed pr-6">
-          <p>Địa chỉ: 1 P. Xốm, Phú Lâm, Hà Đông, Hà Nội </p>
-          <p>Bản quyền thuộc về Liên chi Đoàn Khoa Công nghệ thông tin </p>
-          <p>Được sử dụng bởi Liên Chi Đoàn khoa công nghệ thông tin Trường Đại học Đại Nam</p>
+        <div className="w-full text-right text-md leading-relaxed pr-6">
+          <p>Địa chỉ: Số 1, Phố Xốm, Phường Phú Lương, Thành phố Hà Nội</p>
+          <p>Được sử dụng bởi Liên Chi Đoàn khoa Công nghệ thông tin trường Đại học Đại Nam</p>
+          <p>Bản quyền thuộc về Liên chi Đoàn Khoa Công nghệ thông tin trường Đại học Đại Nam</p>
         </div>
       </footer>
     </>

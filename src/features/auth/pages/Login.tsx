@@ -31,9 +31,7 @@ export const Login: React.FC = () => {
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
-
       message.success(`Đăng nhập thành công với tư cách ${getUserTypeText(userType)}!`);
-
       console.log('Login data:', { ...values, userType });
     } catch {
       message.error('Đăng nhập thất bại. Vui lòng thử lại!');
