@@ -1,4 +1,5 @@
 import CheckOutlined from '@ant-design/icons/lib/icons/CheckOutlined';
+import StudentActivitiesLookup from '@components/common/checkActivites/StudentActivitiesLookup';
 import '@styles/home/CheckAtivities.scss';
 import { Spin } from 'antd';
 import React, { useState } from 'react';
@@ -8,10 +9,12 @@ const CheckActivites = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [searchedStudentId, setSearchedStudentId] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSuccess(false);
+    setSearchedStudentId(null);
     if (/^\d*$/.test(value)) {
       setStudentId(value);
       setError('');
@@ -34,12 +37,24 @@ const CheckActivites = () => {
     setError('');
     setLoading(true);
 
-    // Simulate async search
     setTimeout(() => {
       setLoading(false);
       setSuccess(true);
+      setSearchedStudentId(studentId.trim());
     }, 1200);
   };
+
+  const handleGoBack = () => {
+    setSearchedStudentId(null);
+    setStudentId('');
+    setSuccess(false);
+    setError('');
+  };
+
+  // Nếu đã search thành công, hiển thị StudentActivitiesLookup
+  if (searchedStudentId) {
+    return <StudentActivitiesLookup initialStudentId={searchedStudentId} onGoBack={handleGoBack} />;
+  }
 
   return (
     <div className="relative py-12 flex flex-col items-center justify-center min-h-1/2 overflow-hidden bg-gradient-to-b from-[#e0e7ff] via-[#f0f4ff] to-[#c7d2fe] transition-all">
