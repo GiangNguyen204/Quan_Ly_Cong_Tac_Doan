@@ -2,6 +2,7 @@ import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { ViteImageOptimizer } from 'vite-plugin-image-optimizer';
+import { createHtmlPlugin } from 'vite-plugin-html';
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -10,6 +11,31 @@ export default defineConfig({
     tailwindcss(),
     ViteImageOptimizer({
       webp: { quality: 80 },
+    }),
+    createHtmlPlugin({
+      minify: true,
+      inject: {
+        tags: [
+          {
+            tag: 'link',
+            attrs: {
+              rel: 'preload',
+              as: 'style',
+              href: '/assets/index.css',
+            },
+            injectTo: 'head',
+          },
+          {
+            tag: 'script',
+            attrs: {
+              src: '/src/main.tsx',
+              type: 'module',
+              defer: true,
+            },
+            injectTo: 'body',
+          },
+        ],
+      },
     }),
   ],
   resolve: {
