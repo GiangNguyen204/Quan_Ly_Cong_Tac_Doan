@@ -13,6 +13,8 @@ export interface BaseAntTableProps<T> extends TableProps<T> {
   breakpoint?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl';
   hideColumnsOnMobile?: string[];
   mobileCardView?: boolean;
+  showHeader?: boolean;
+  stickyHeader?: boolean;
 }
 
 export function BaseAntTable<T extends object>({
@@ -26,60 +28,67 @@ export function BaseAntTable<T extends object>({
   pagination,
   scroll,
   size = 'middle',
+  showHeader = true,
+  stickyHeader = false,
   ...rest
 }: BaseAntTableProps<T>) {
   const [isMobile, setIsMobile] = React.useState(false);
-
-  // Responsive breakpoints
-  const breakpoints = React.useMemo(
-    () => ({
-      xs: 576,
-      sm: 768,
-      md: 992,
-      lg: 1200,
-      xl: 1600,
-      xxl: 1920,
-    }),
-    [],
+  const [isTablet, setIsTablet] = React.useState(false);
+  const [windowWidth, setWindowWidth] = React.useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1200,
+  );
+  const [devicePixelRatio, setDevicePixelRatio] = React.useState(
+    typeof window !== 'undefined' ? window.devicePixelRatio : 1,
   );
 
   React.useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
+      const dpr = window.devicePixelRatio || 1;
 
-      if (width < breakpoints.xs) {
-        setIsMobile(true);
-      } else if (width < breakpoints.sm) {
-        setIsMobile(true);
-      } else if (width < breakpoints.md) {
-        setIsMobile(width < breakpoints[breakpoint]);
-      } else if (width < breakpoints.lg) {
-        setIsMobile(false);
-      } else if (width < breakpoints.xl) {
-        setIsMobile(false);
-      } else {
-        setIsMobile(false);
-      }
+      setWindowWidth(width);
+      setDevicePixelRatio(dpr);
+
+      const zoomAdjustment = dpr > 1 ? 1 + (dpr - 1) * 0.3 : 1;
+      const adjustedWidth = width * zoomAdjustment;
+
+      setIsMobile(adjustedWidth < 768 * zoomAdjustment);
+
+      setIsTablet(adjustedWidth >= 768 * zoomAdjustment && adjustedWidth < 1024 * zoomAdjustment);
     };
 
     handleResize();
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, [breakpoint, breakpoints]);
+
+    const mediaQuery = window.matchMedia('screen');
+    mediaQuery.addEventListener('change', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      mediaQuery.removeEventListener('change', handleResize);
+    };
+  }, []);
 
   const defaultPagination = React.useMemo(() => {
     const paginationSize: 'small' | 'default' = isMobile ? 'small' : 'default';
+
+    const isHighZoom = devicePixelRatio > 1.2;
+
     return {
-      showSizeChanger: !isMobile,
-      showQuickJumper: !isMobile,
-      showTotal: (total: number, range: [number, number]) =>
-        isMobile ? `${range[0]}-${range[1]}/${total}` : `${range[0]}-${range[1]} của ${total} mục`,
+      showSizeChanger: !isMobile && !isHighZoom,
+      showQuickJumper: !isMobile && windowWidth > 1024 && !isHighZoom,
+      showTotal: (total: number, range: [number, number]) => {
+        if (isMobile) return `${range[0]}-${range[1]}/${total}`;
+        if (isTablet || isHighZoom) return `${range[0]}-${range[1]} / ${total}`;
+        return `${range[0]}-${range[1]} của ${total} mục`;
+      },
       pageSizeOptions: ['10', '20', '50', '100'],
       size: paginationSize,
       pageSize: isMobile ? 10 : 20,
+      simple: isMobile && windowWidth < 480,
       ...pagination,
     };
-  }, [isMobile, pagination]);
+  }, [isMobile, isTablet, windowWidth, devicePixelRatio, pagination]);
 
   const enhancedColumns = React.useMemo(() => {
     return columns.map((col) => ({
@@ -105,11 +114,28 @@ export function BaseAntTable<T extends object>({
   const responsiveScroll = React.useMemo(() => {
     if (!responsive) return scroll;
 
-    return {
+    const baseScroll: { x?: string | number | true; y?: string | number } = {
       x: 'max-content',
       ...scroll,
     };
-  }, [responsive, scroll]);
+
+    if (isMobile) {
+      return {
+        ...baseScroll,
+        x: scroll?.x || 'max-content',
+        y: scroll?.y || undefined,
+      };
+    }
+
+    if (isTablet) {
+      return {
+        ...baseScroll,
+        x: scroll?.x || 'max-content',
+      };
+    }
+
+    return baseScroll;
+  }, [responsive, scroll, isMobile, isTablet]);
 
   const responsiveColumns = React.useMemo(() => {
     if (!compactOnMobile) return enhancedColumns;
@@ -118,26 +144,31 @@ export function BaseAntTable<T extends object>({
       const responsive = col.responsive;
       let className = col.className || '';
 
-      // Auto-hide columns on mobile based on priority
       if (isMobile) {
-        // Always show first column (usually key/name)
         if (index === 0) {
-          return { ...col, className: className.trim() };
+          return {
+            ...col,
+            className: className.trim(),
+            ellipsis: true,
+          };
         }
 
-        // Always show last column if it contains actions
-        if (
-          index === enhancedColumns.length - 1 &&
-          (col.key === 'actions' ||
-            ('dataIndex' in col && col.dataIndex === 'actions') ||
-            (col.title &&
-              typeof col.title === 'string' &&
-              col.title.toLowerCase().includes('thao tác')))
-        ) {
-          return { ...col, className: className.trim() };
+        const isActionColumn =
+          col.key === 'actions' ||
+          ('dataIndex' in col && col.dataIndex === 'actions') ||
+          (col.title &&
+            typeof col.title === 'string' &&
+            (col.title.toLowerCase().includes('thao tác') ||
+              col.title.toLowerCase().includes('hành động')));
+
+        if (index === enhancedColumns.length - 1 && isActionColumn) {
+          return {
+            ...col,
+            className: className.trim(),
+            fixed: windowWidth < 576 ? undefined : col.fixed,
+          };
         }
 
-        // Hide non-essential columns on mobile
         if (
           !responsive ||
           (Array.isArray(responsive) && !responsive.includes('xs') && !responsive.includes('sm'))
@@ -146,7 +177,6 @@ export function BaseAntTable<T extends object>({
         }
       }
 
-      // Apply responsive classes based on breakpoints
       if (responsive && Array.isArray(responsive)) {
         if (!responsive.includes('xs')) className += ' hidden-xs';
         if (!responsive.includes('sm')) className += ' hidden-sm';
@@ -158,27 +188,37 @@ export function BaseAntTable<T extends object>({
       return {
         ...col,
         className: className.trim(),
-        // Reduce column width on mobile
+
+        ellipsis: isMobile ? { showTitle: true } : col.ellipsis,
+
         width:
-          isMobile && col.width
-            ? typeof col.width === 'number'
-              ? Math.min(col.width, 120)
-              : col.width
+          isMobile && col.width && typeof col.width === 'number'
+            ? Math.min(col.width, 120)
             : col.width,
+
+        fixed: windowWidth < 576 ? undefined : col.fixed,
       };
     });
-  }, [enhancedColumns, compactOnMobile, isMobile]);
+  }, [enhancedColumns, compactOnMobile, isMobile, windowWidth]);
 
   const tableClassName = React.useMemo(() => {
     const baseClass = 'base-ant-table';
     const mobileClass = isMobile ? 'mobile-responsive' : '';
-    return [baseClass, mobileClass, className].filter(Boolean).join(' ');
-  }, [className, isMobile]);
+    const tabletClass = isTablet ? 'tablet-responsive' : '';
+    const stickyClass = stickyHeader ? 'sticky-header' : '';
+
+    const zoomClass = devicePixelRatio > 1.15 ? 'zoom-compact' : '';
+    return [baseClass, mobileClass, tabletClass, stickyClass, zoomClass, className]
+      .filter(Boolean)
+      .join(' ');
+  }, [className, isMobile, isTablet, stickyHeader, devicePixelRatio]);
 
   const tableSize = React.useMemo(() => {
+    if (windowWidth < 480) return 'small';
     if (isMobile) return 'small';
+    if (isTablet) return 'middle';
     return size;
-  }, [isMobile, size]);
+  }, [isMobile, isTablet, windowWidth, size]);
 
   return (
     <div className={tableClassName}>
@@ -189,10 +229,13 @@ export function BaseAntTable<T extends object>({
         pagination={defaultPagination}
         scroll={responsiveScroll}
         size={tableSize}
+        showHeader={showHeader}
+        sticky={stickyHeader ? { offsetHeader: 64 } : false}
         rowClassName={(_, index) => {
           const baseRowClass = `table-row-${index % 2 === 0 ? 'even' : 'odd'}`;
           const mobileRowClass = isMobile ? 'mobile-row' : '';
-          return [baseRowClass, mobileRowClass].filter(Boolean).join(' ');
+          const tabletRowClass = isTablet ? 'tablet-row' : '';
+          return [baseRowClass, mobileRowClass, tabletRowClass].filter(Boolean).join(' ');
         }}
         {...rest}
       />
