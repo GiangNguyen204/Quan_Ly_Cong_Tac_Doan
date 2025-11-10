@@ -29,9 +29,8 @@ export const SidebarAdmin = ({ collapsed }: SidebarAdminProps) => {
   const getCurrentSelectedKey = () => {
     const path = location.pathname;
     // Dashboard submenu
-    if (path.includes('/dashboard/analytics')) return ['analytics'];
+    if (path.includes('/dashboard/statistical')) return ['statistical'];
     if (path.includes('/dashboard/reports')) return ['reports'];
-    if (path.includes('/dashboard/charts')) return ['charts'];
     if (path.includes('/dashboard/overview')) return ['dashboard'];
 
     // User Management submenu
@@ -47,12 +46,11 @@ export const SidebarAdmin = ({ collapsed }: SidebarAdminProps) => {
     // Settings submenu
     if (path.includes('/settings/system')) return ['system-settings'];
     if (path.includes('/settings/security')) return ['security-settings'];
-    if (path.includes('/settings/notifications')) return ['notification-settings'];
+    if (path.includes('/settings/notification')) return ['notification-settings'];
     if (path.includes('/settings')) return ['settings'];
 
     return ['dashboard'];
   };
-
   const getOpenKeys = (): string[] => {
     const path = location.pathname;
     const openKeys: string[] = [];
@@ -69,9 +67,8 @@ export const SidebarAdmin = ({ collapsed }: SidebarAdminProps) => {
     const routeMap: Record<string, string> = {
       // Dashboard routes
       dashboard: '/admin/dashboard/overview',
-      analytics: '/admin/dashboard/statistical',
+      statistical: '/admin/dashboard/statistical',
       reports: '/admin/dashboard/reports',
-      charts: '/admin/dashboard/charts',
 
       // User Management routes
       users: '/admin/users/list',
@@ -84,9 +81,10 @@ export const SidebarAdmin = ({ collapsed }: SidebarAdminProps) => {
 
       // Settings routes
       settings: '/admin/settings',
+      'general-settings': '/admin/settings/general',
       'system-settings': '/admin/settings/system',
       'security-settings': '/admin/settings/security',
-      'notification-settings': '/admin/settings/notifications',
+      'notification-settings': '/admin/settings/notification',
     };
 
     if (routeMap[key]) {
@@ -107,7 +105,7 @@ export const SidebarAdmin = ({ collapsed }: SidebarAdminProps) => {
             label: 'Tổng quan',
           },
           {
-            key: 'analytics',
+            key: 'statistical',
             icon: <LineChartOutlined />,
             label: 'Thống kê',
           },
@@ -115,11 +113,6 @@ export const SidebarAdmin = ({ collapsed }: SidebarAdminProps) => {
             key: 'reports',
             icon: <ProfileOutlined />,
             label: 'Báo cáo',
-          },
-          {
-            key: 'charts',
-            icon: <PieChartOutlined />,
-            label: 'Biểu đồ',
           },
         ],
       },
@@ -163,7 +156,7 @@ export const SidebarAdmin = ({ collapsed }: SidebarAdminProps) => {
         label: 'Cài đặt',
         children: [
           {
-            key: 'settings',
+            key: 'general-settings',
             icon: <ToolOutlined />,
             label: 'Chung',
           },
