@@ -1,7 +1,7 @@
 import { adminRoute } from '@routes/admin.routes';
 import { createRoute } from '@tanstack/react-router';
-import CohortCategory from '../pages/genral-category/cohort/CohortCategory';
-import BranchCategory from '../pages/genral-category/branch/BranchCategory';
+import CohortCategory from '../pages/general-category/cohort/CohortCategory';
+import BranchCategory from '../pages/general-category/branch/BranchCategory';
 
 // Main route
 const generalCategoryRouteAdmin = createRoute({

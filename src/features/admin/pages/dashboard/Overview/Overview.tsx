@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   BarChart,
   Bar,
@@ -16,7 +16,7 @@ import {
 
 const OverviewDashboard = () => {
   // Dữ liệu mẫu (sau này thay bằng dữ liệu thật từ API)
-  const [stats, setStats] = useState({
+  const [stats] = useState({
     members: 482,
     branches: 12,
     activities: 18,
@@ -121,8 +121,8 @@ const OverviewDashboard = () => {
                 outerRadius={80}
                 dataKey="value"
               >
-                {typeData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                {typeData.map((item, index) => (
+                  <Cell key={`cell-${item.name}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
               <Tooltip />
