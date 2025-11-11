@@ -23,60 +23,130 @@
 
 ---
 
-## 📘 1. Giới thiệu hệ thống
+1. GIỚI THIỆU HỆ THỐNG
+-----------------------
 
-**Hệ thống Web Quản lý Công tác Đoàn** được phát triển nhằm số hoá nghiệp vụ quản lý hoạt động Đoàn – Hội của **Liên Chi Đoàn Khoa CNTT**, giúp tự động hoá việc thống kê, tra cứu và truyền thông nội bộ trong công tác thanh niên.
+Hệ thống Web Quản lý Công tác Đoàn được xây dựng nhằm số hoá các nghiệp vụ chính của Liên chi Đoàn Khoa Công nghệ Thông tin – Trường Đại học Đại Nam.
 
-### 🎯 Mục tiêu chính
-- Quản lý thông tin **đoàn viên, chi đoàn, Ban Chấp hành** và các **hoạt động Đoàn – Hội**.
-- Cho phép **tra cứu lịch sử tham gia hoạt động** của đoàn viên dựa trên mã sinh viên.
-- Cung cấp **bảng tin – liên hệ – phân quyền truy cập** cho 3 nhóm vai trò: Đoàn viên, Cán bộ Đoàn, Quản trị viên.
-- Tăng hiệu quả phối hợp giữa đoàn viên và Ban Chấp hành thông qua nền tảng web hiện đại.
+Mục tiêu:
+- Cung cấp cổng thông tin tập trung về công tác Đoàn: giới thiệu, tin tức, hoạt động, liên hệ.
+- Hỗ trợ đoàn viên tra cứu lịch sử tham gia hoạt động dựa trên mã sinh viên, làm minh chứng cho điểm rèn luyện và xét khen thưởng.
+- Hỗ trợ Ban Chấp hành quản lý danh sách cán bộ Đoàn, nhiệm kỳ, chi đoàn, thông tin liên hệ.
+- Tạo nền tảng kỹ thuật có khả năng mở rộng, kết nối API với các hệ thống quản lý khác của nhà trường.
 
----
+Các nhóm người dùng chính:
+- Đoàn viên: xem tin tức, tra cứu hoạt động, gửi góp ý/liên hệ.
+- Cán bộ Đoàn: quản lý hoạt động, danh sách tham gia, dữ liệu chi đoàn.
+- Quản trị viên (Admin): quản lý tài khoản, cấu hình năm học, khoá, danh mục hoạt động và phân quyền.
 
-## ⚙️ 2. Công nghệ và công cụ phát triển
 
-| Thành phần | Công nghệ / Công cụ sử dụng | Mô tả |
-|-------------|-----------------------------|--------|
-| **Frontend** | React.js + Tailwind CSS | Xây dựng giao diện động, responsive, theo mô hình component. |
-| **Backend** | Node.js (Express.js) | Cung cấp REST API, xử lý xác thực và kết nối dữ liệu. |
-| **API mô tả** | Swagger / OpenAPI | Sinh tài liệu API và thử nghiệm các endpoint. |
-| **Môi trường lập trình** | Visual Studio / Visual Studio Code | Soạn thảo, quản lý và gỡ lỗi mã nguồn. |
-| **Cơ sở dữ liệu (mô phỏng)** | JSON hoặc API mẫu | Minh họa lưu trữ thông tin đoàn viên, hoạt động, BCH. |
+2. CÔNG NGHỆ SỬ DỤNG
+---------------------
 
----
+Frontend:
+- React.js: xây dựng giao diện người dùng theo mô hình component.
+- Tailwind CSS: thiết kế giao diện hiện đại, responsive, dùng utility class.
+- HTML5/CSS3/JavaScript (ES6+).
 
-## 🧭 3. Chức năng chính
+Backend:
+- Node.js (Express.js): xây dựng REST API, xử lý logic nghiệp vụ, phân quyền.
+- Mô tả API bằng Swagger/OpenAPI: sinh tài liệu API, test trực tiếp các endpoint.
 
-### 👥 Quản lý người dùng và phân quyền
-- Đăng nhập với ba vai trò: **Đoàn viên – Cán bộ Đoàn – Admin**.  
-- Giao diện đăng nhập trực quan, chia tab theo vai trò.  
-- Mỗi vai trò có mức truy cập và quyền thao tác riêng biệt.
+Công cụ lập trình:
+- Visual Studio / Visual Studio Code: soạn thảo, quản lý và gỡ lỗi mã nguồn.
+- Git: quản lý version mã nguồn.
 
-### 📰 Trang chủ & Tin tức
-- Hiển thị banner, giới thiệu về **Liên Chi Đoàn Khoa CNTT**.  
-- Danh mục **tin tức** được trình bày dưới dạng thẻ bài, có ảnh, tiêu đề, ngày đăng.
+Dữ liệu (minh hoạ):
+- Lưu trữ thông tin đoàn viên, hoạt động, tham gia, BCH chi đoàn và liên hệ dưới dạng CSDL (SQL/noSQL) hoặc dữ liệu JSON/API mẫu tuỳ môi trường triển khai.
 
-### 🔍 Tra cứu hoạt động Đoàn
-- Tra cứu theo **mã sinh viên** để xem danh sách các hoạt động đã tham gia.  
-- Kết quả bao gồm tên hoạt động, thời gian, vai trò (tham gia / hỗ trợ / BTC).  
-- API mẫu minh họa cho khả năng kết nối hệ thống điểm rèn luyện trong tương lai.
 
-### 🧑‍💼 Ban Chấp Hành Chi Đoàn
-- Hiển thị danh sách **Bí thư, Phó bí thư, Ủy viên, Cán bộ chi đoàn**.  
-- Có bộ lọc theo **nhiệm kỳ** và **chi đoàn**.  
-- Mỗi thẻ hiển thị họ tên, chức vụ, email, số điện thoại, chi đoàn phụ trách.
+3. MỘT SỐ HÌNH ẢNH HỆ THỐNG
+----------------------------
 
-### 💬 Liên hệ & Góp ý
-- Biểu mẫu liên hệ gồm họ tên, email, chủ đề, nội dung chi tiết.  
-- Gửi dữ liệu về backend lưu lại và phân loại cho cán bộ phụ trách.
+(Ảnh minh hoạ, bạn có thể thay đường dẫn/ảnh thật trong repo của mình)
 
----
+- Giao diện đăng nhập hệ thống Quản lý Công tác Đoàn
+  + File: login_demo.jpg
+  + Nội dung: giao diện chia làm hai phần – bên trái giới thiệu Đoàn Thanh niên và lợi ích hệ thống, bên phải là thẻ đăng nhập với 3 tab: Đoàn viên, Cán bộ Đoàn, Admin.
 
-## 🏗️ 4. Kiến trúc hệ thống
+- Trang chủ cổng thông tin Liên chi Đoàn
+  + File: home_demo.jpg
+  + Nội dung: banner sinh viên CNTT, thanh menu (Trang chủ, Tra cứu hoạt động Đoàn, BCH chi đoàn, Liên hệ), các khối giới thiệu và tin tức dạng thẻ.
 
-```text
-[React.js + Tailwind CSS] ⇄ [Node.js Backend + Express]
-          ⇓ Swagger/OpenAPI
-     [Database / Mock API / JSON Data]
+- Giao diện Tra cứu hoạt động Đoàn
+  + File: tracuu_demo.jpg
+  + Nội dung: thẻ tra cứu theo mã sinh viên, hiển thị danh sách hoạt động đã tham gia (tên hoạt động, thời gian, vai trò).
+
+- Trang hiển thị Ban Chấp Hành chi đoàn
+  + File: bch_demo.jpg
+  + Nội dung: lưới thẻ thông tin cán bộ Đoàn (họ tên, chức vụ, chi đoàn, email, số điện thoại) cùng bộ lọc theo nhiệm kỳ, chi đoàn.
+
+- Trang Liên hệ – Góp ý
+  + File: lienhe_demo.jpg
+  + Nội dung: biểu mẫu gửi góp ý, thắc mắc (họ tên, email, nội dung), kèm thông tin liên hệ văn phòng Liên chi Đoàn.
+
+
+4. HƯỚNG DẪN CÀI ĐẶT & TRIỂN KHAI
+----------------------------------
+
+Yêu cầu hệ thống:
+- Node.js cài đặt trên máy (phiên bản LTS).
+- Trình duyệt hiện đại (Chrome/Edge/Firefox).
+- Visual Studio hoặc Visual Studio Code để lập trình và chạy dự án.
+
+Bước 1: Clone dự án
+- Mở terminal và chạy:
+  git clone https://github.com/<username>/<ten-repo-quan-ly-doan>.git
+  cd <ten-repo-quan-ly-doan>
+
+Bước 2: Cài đặt thư viện
+- Nếu frontend và backend nằm chung:
+  npm install
+- Nếu tách riêng:
+  - Vào thư mục frontend:
+    cd frontend
+    npm install
+  - Vào thư mục backend:
+    cd backend
+    npm install
+
+Bước 3: Cấu hình backend (Node.js)
+- Kiểm tra file cấu hình (ví dụ: .env hoặc config.js) gồm:
+  - PORT (cổng backend, ví dụ: 5000)
+  - Cấu hình kết nối CSDL (nếu dùng)
+- Khởi chạy backend:
+  npm start
+- Truy cập Swagger UI (nếu có cấu hình): http://localhost:5000/api-docs
+
+Bước 4: Cấu hình frontend (React.js)
+- Trong thư mục frontend, chỉnh sửa biến môi trường (ví dụ: VITE_API_URL hoặc REACT_APP_API_URL) trỏ đến URL backend:
+  http://localhost:5000
+- Khởi động frontend:
+  npm run dev
+- Truy cập giao diện web:
+  http://localhost:3000
+
+Bước 5: Kiểm tra hệ thống
+- Đăng nhập với vai trò phù hợp (Đoàn viên / Cán bộ Đoàn / Admin).
+- Thử:
+  + Tra cứu hoạt động Đoàn theo mã sinh viên.
+  + Xem danh sách BCH chi đoàn.
+  + Xem tin tức và thử gửi liên hệ/góp ý.
+
+
+5. LIÊN HỆ
+-----------
+
+Sinh viên thực hiện:
+- Họ tên: Nguyễn Thúy Hằng
+- Khoa: Công Nghệ Thông Tin – Trường Đại học Đại Nam
+
+Giảng viên hướng dẫn:
+- ThS. Lê Trung Hiếu
+- KS. Nguyễn Thái Khánh
+
+Thông tin liên hệ:
+- Khoa Công Nghệ Thông Tin – Trường Đại học Đại Nam
+- Website: https://dainam.edu.vn/vi/khoa-cong-nghe-thong-tin
+- (Bạn có thể bổ sung thêm email, số điện thoại hoặc Facebook cá nhân/LCĐ nếu cần)
+
